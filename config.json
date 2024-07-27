@@ -1,18 +1,18 @@
 {
 	"head": {
 		"title": "一个坏掉的番茄",
-		"description": "Author:SimonMa,Category:Personal Blog",
+		"description": "Author:Alexander J. Taylor,Category:Personal Blog",
 		"favicon": "favicon.ico"
 	},
 	"intro": {
-		"title": "Simon Ma",
-		"subtitle": "Front back left right end engineer",
+		"title": "Alexander J. Taylor",
+		"subtitle": "Flawed brazen loving reckless encompassing man",
 		"enter": "enter",
 		"supportAuthor": true,
 		"background": true
 	},
 	"main": {
-		"name": "Simon Ma",
+		"name": "Alexander J. Taylor",
 		"signature": "Code & Input & Output",
 		"avatar": {
 			"link": "assets/avatar.jpg",
