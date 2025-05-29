@@ -50,5 +50,3 @@ gulp.task('watch', () => {
 })
 
 gulp.task('build', gulp.series('clean', gulp.parallel('styles', 'views')))
-
-
