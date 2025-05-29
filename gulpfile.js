@@ -52,29 +52,3 @@ gulp.task('watch', () => {
 gulp.task('build', gulp.series('clean', gulp.parallel('styles', 'views')))
 
 
-// ---------- src/pug/index.pug ----------
-doctype html
-html
-  head
-    title Alexander J. Taylor
-    link(rel="stylesheet" href="/css/main.css")
-  body
-    h1 Hello, I'm Alexander J. Taylor
-    p Welcome to my portfolio homepage.
-
-
-// ---------- src/styles/main.scss ----------
-body {
-  background: #111;
-  color: #fff;
-  font-family: sans-serif;
-  padding: 2rem;
-}
-h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-}
-p {
-  font-size: 1.2rem;
-  line-height: 1.5;
-}
