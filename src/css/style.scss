@@ -1,9 +1,14 @@
-@import 'common/variable';
-@import 'common/common';
-@import 'common/icon';
-
-@import 'layout/layout';
-
-@import 'intro/intro';
-@import 'main/main';
-
+body {
+  background: #111;
+  color: #fff;
+  font-family: sans-serif;
+  padding: 2rem;
+}
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+p {
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
