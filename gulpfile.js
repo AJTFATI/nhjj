@@ -1,73 +1,80 @@
 const gulp = require('gulp')
-const minifycss = require('gulp-clean-css')
+const sass = require('gulp-sass')(require('sass'))
+const pug = require('gulp-pug')
+const autoprefixer = require('gulp-autoprefixer')
+const cleanCSS = require('gulp-clean-css')
 const uglify = require('gulp-uglify')
 const htmlmin = require('gulp-htmlmin')
-const cssnano = require('gulp-cssnano')
-const htmlclean = require('gulp-htmlclean')
 const del = require('del')
-const babel = require('gulp-babel')
-const autoprefixer = require('gulp-autoprefixer')
 const connect = require('gulp-connect')
-const pug = require('gulp-pug')
-const sass = require('gulp-sass')
-sass.compiler = require('node-sass')
 
-const config = require('./config.json')
+const paths = {
+  styles: {
+    src: 'src/styles/**/*.scss',
+    dest: 'dist/css'
+  },
+  views: {
+    src: 'src/pug/**/*.pug',
+    dest: 'dist'
+  }
+}
 
-gulp.task('clean', function () {
-	return del(['./dist/css/', './dist/js/'])
+gulp.task('clean', () => del(['dist']))
+
+gulp.task('styles', () => {
+  return gulp
+    .src(paths.styles.src)
+    .pipe(sass().on('error', sass.logError))
+    .pipe(autoprefixer())
+    .pipe(cleanCSS())
+    .pipe(gulp.dest(paths.styles.dest))
+    .pipe(connect.reload())
 })
 
-gulp.task('css', function () {
-	return gulp
-		.src('./src/css/*.scss')
-		.pipe(sass().on('error', sass.logError))
-		.pipe(minifycss({ compatibility: 'ie8' }))
-		.pipe(autoprefixer({ browsers: ['last 2 version'] }))
-		.pipe(cssnano({ reduceIdents: false }))
-		.pipe(gulp.dest('./dist/css'))
+gulp.task('views', () => {
+  return gulp
+    .src(paths.views.src)
+    .pipe(pug())
+    .pipe(htmlmin({ collapseWhitespace: true }))
+    .pipe(gulp.dest(paths.views.dest))
+    .pipe(connect.reload())
 })
 
-gulp.task('html', function () {
-	return gulp
-		.src('./dist/index.html')
-		.pipe(htmlclean())
-		.pipe(htmlmin())
-		.pipe(gulp.dest('./dist'))
+gulp.task('watch', () => {
+  connect.server({
+    root: 'dist',
+    livereload: true
+  })
+  gulp.watch(paths.styles.src, gulp.series('styles'))
+  gulp.watch(paths.views.src, gulp.series('views'))
 })
 
-gulp.task('js', function () {
-	return gulp
-		.src('./src/js/*.js')
-		.pipe(babel({ presets: ['@babel/preset-env'] }))
-		.pipe(uglify())
-		.pipe(gulp.dest('./dist/js'))
-})
+gulp.task('build', gulp.series('clean', gulp.parallel('styles', 'views')))
 
-gulp.task('pug', function () {
-	return gulp
-		.src('./src/index.pug')
-		.pipe(pug({ data: config }))
-		.pipe(gulp.dest('./dist'))
-})
 
-gulp.task('assets', function () {
-	return gulp
-		.src(['./src/assets/**/*'])
-		.pipe(gulp.dest('./dist/assets'));
-})
+// ---------- src/pug/index.pug ----------
+doctype html
+html
+  head
+    title Alexander J. Taylor
+    link(rel="stylesheet" href="/css/main.css")
+  body
+    h1 Hello, I'm Alexander J. Taylor
+    p Welcome to my portfolio homepage.
 
-gulp.task('build', gulp.series('clean', 'assets', 'pug', 'css', 'js', 'html'))
-gulp.task('default', gulp.series('build'))
 
-gulp.task('watch', function () {
-	gulp.watch('./src/components/*.pug', gulp.parallel('pug'))
-	gulp.watch('./src/index.pug', gulp.parallel('pug'))
-	gulp.watch('./src/css/**/*.scss', gulp.parallel(['css']))
-	gulp.watch('./src/js/*.js', gulp.parallel(['js']))
-	connect.server({
-		root: 'dist',
-		livereload: true,
-		port: 8080
-	})
-})
+// ---------- src/styles/main.scss ----------
+body {
+  background: #111;
+  color: #fff;
+  font-family: sans-serif;
+  padding: 2rem;
+}
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+p {
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
